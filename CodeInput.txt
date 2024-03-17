@@ -1,0 +1,5 @@
+hippopotamus function = ptrodactyl arg1, arg2 -> out1 {
+    out1 = arg1 * arg2
+}e
+
+p -> function(5, 10).out1e

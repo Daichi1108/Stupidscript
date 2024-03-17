@@ -1,0 +1,14 @@
+c:\Users\daich\Documents\GitHub\Stupidscript\bin\Debug\net8.0\Stupidscript.exe
+c:\Users\daich\Documents\GitHub\Stupidscript\bin\Debug\net8.0\Stupidscript.deps.json
+c:\Users\daich\Documents\GitHub\Stupidscript\bin\Debug\net8.0\Stupidscript.runtimeconfig.json
+c:\Users\daich\Documents\GitHub\Stupidscript\bin\Debug\net8.0\Stupidscript.dll
+c:\Users\daich\Documents\GitHub\Stupidscript\bin\Debug\net8.0\Stupidscript.pdb
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.AssemblyInfoInputs.cache
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.AssemblyInfo.cs
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.csproj.CoreCompileInputs.cache
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.dll
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\refint\Stupidscript.dll
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.pdb
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.genruntimeconfig.cache
+c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\ref\Stupidscript.dll
