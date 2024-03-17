@@ -1,4 +1,4 @@
-#Stupidscript
+Stupidscript
 
 Very bad programming language. Super hard to use but it kinda works sometimes.
 
