@@ -12,3 +12,4 @@ c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\refint\Stupidscrip
 c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.pdb
 c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.genruntimeconfig.cache
 c:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\ref\Stupidscript.dll
+C:\Users\daich\Documents\GitHub\Stupidscript\obj\Debug\net8.0\Stupidscript.sourcelink.json
