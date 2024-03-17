@@ -68,24 +68,6 @@ class VarDeclaration : Stmt {
     }
 }
 
-class ActionStmt : Stmt {
-    public string left = "";
-    public Expr right = new();
-
-    public override RuntimeVal Eval(Env env)
-    {
-        switch (left) {
-            case "p":
-                Console.Write(right.Eval(env));
-                return new NullVal();
-            case "pl":
-                Console.WriteLine(right.Eval(env));
-                return new NullVal();
-            default: throw new Exception($"the fuck is {left}?");
-        }
-    }
-}
-
 //EXPR
 class VarAssignment : Expr {
     public string identifier = "";
@@ -207,22 +189,33 @@ class CallExpr : Expr {
 
     public override RuntimeVal Eval(Env env)
     {
-        Function function = (Function)func.Eval(env);
-        Env fenv = new() { parent=env };
-        for (int i = 0; i < function.parameters.Count; i++) {
-            fenv.DeclareVar(function.parameters[i], args[i].Eval(fenv));
+        RuntimeVal fn = func.Eval(env);
+        if (fn is Function) {
+            Function function = (Function)fn;
+            Env fenv = new() { parent=env };
+            for (int i = 0; i < function.parameters.Count; i++) {
+                fenv.DeclareVar(function.parameters[i], args[i].Eval(fenv));
+            }
+            foreach (string r in function.returns) {
+                fenv.DeclareVar(r, new NullVal());
+            }
+            foreach (Stmt stmt in function.body) {
+                stmt.Eval(fenv);
+            }
+            Dictionary<string, RuntimeVal> returns = new();
+            foreach (string r in function.returns) {
+                returns.Add(r, fenv.GetVal(r));
+            }
+            return new Object() { properties=returns };
         }
-        foreach (string r in function.returns) {
-            fenv.DeclareVar(r, new NullVal());
+        if (fn is NativeFn) {
+            List<RuntimeVal> argVals = new();
+            foreach (Expr expr in args) {
+                argVals.Add(expr.Eval(env));
+            }
+            return ((NativeFn)fn).func(argVals);
         }
-        foreach (Stmt stmt in function.body) {
-            stmt.Eval(fenv);
-        }
-        Dictionary<string, RuntimeVal> returns = new();
-        foreach (string r in function.returns) {
-            returns.Add(r, fenv.GetVal(r));
-        }
-        return new Object() { properties=returns };
+        throw new Exception("ya no i dont feel like it");
     }
 }
 

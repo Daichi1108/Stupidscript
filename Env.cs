@@ -9,6 +9,22 @@ class Env {
         env.DeclareVar("fals", new BoolVal() { value=false });
         env.DeclareVar("null", new NullVal());
 
+        static Object Print(List<RuntimeVal> args) {
+            foreach (RuntimeVal val in args) {
+                Console.Write(val);
+            }
+            return new Object();
+        }
+        env.DeclareVar("print", new NativeFn() { func=Print });
+
+        static Object PrintLn(List<RuntimeVal> args) {
+            foreach (RuntimeVal val in args) {
+                Console.WriteLine(val);
+            }
+            return new Object();
+        }
+        env.DeclareVar("println", new NativeFn() { func=PrintLn });
+
         return env;
     }
 

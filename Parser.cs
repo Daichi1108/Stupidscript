@@ -100,18 +100,7 @@ class Parser {
             Expect(TokenType.LineEnd, "No line end found :(");
             return new VarDeclaration() { identifier = identifier};
         }
-        return ParseActionStmt();
-    }
-
-    Stmt ParseActionStmt() {
-        Expr left = ParseExpr();
-        if (At().type == TokenType.Arrow) {
-            Eat();
-            Expr right = ParseExpr();
-            Expect(TokenType.LineEnd, "NO LINE ENDDDDDDDDDDD");
-            return new ActionStmt() { left=((Identifier)left).symbol, right=right };
-        }
-        return left;
+        return ParseEqualityExpr();
     }
 
     Expr ParseExpr() {

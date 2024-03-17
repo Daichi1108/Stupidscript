@@ -1,2 +1,1 @@
-hippopotamus function = "012345"e
-p -> function[2]e
+println(1, 2, 3, 4, 5, 6, 7)

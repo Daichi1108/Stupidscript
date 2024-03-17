@@ -68,3 +68,8 @@ class Function : RuntimeVal {
         return str.Substring(0, str.Length-2);
     }
 }
+
+delegate Object Func(List<RuntimeVal> args);
+class NativeFn : RuntimeVal {
+    public Func func;
+}
