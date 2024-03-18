@@ -100,7 +100,7 @@ class Parser {
             Expect(TokenType.LineEnd, "No line end found :(");
             return new VarDeclaration() { identifier = identifier};
         }
-        return ParseEqualityExpr();
+        return ParseExpr();
     }
 
     Expr ParseExpr() {

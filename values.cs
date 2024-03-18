@@ -71,5 +71,5 @@ class Function : RuntimeVal {
 
 delegate Object Func(List<RuntimeVal> args);
 class NativeFn : RuntimeVal {
-    public Func func;
+    public required Func func;
 }
