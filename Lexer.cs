@@ -31,6 +31,7 @@ class Lexer {
 
     public List<Token> Tokenize(string code) {
         code = ToLowerCase(code) + " ";
+        code = RemoveComments(code);
         List<Token> tokens = new List<Token>();
 
         while (code.Length > 0) {
@@ -123,6 +124,15 @@ class Lexer {
             }
             o += str.ToLower();
             return o;
+        }
+
+        string RemoveComments(string str) {
+            string o = "";
+            while (str.Contains("//")) {
+                o += str.Substring(0, str.IndexOf("//"));
+                str = str.Substring(str.IndexOf("\n"));
+            }
+            return o + str;
         }
     }
 }
