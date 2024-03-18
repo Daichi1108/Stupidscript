@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 class Parser {
 
     List<Stmt> ast = new();
@@ -94,10 +96,8 @@ class Parser {
             if (At().type == TokenType.Equals) {
                 Eat();
                 Expr value = ParseExpr();
-                Expect(TokenType.LineEnd, "No line end found :(");
                 return new VarDeclaration() { identifier = identifier, value = value};
             }
-            Expect(TokenType.LineEnd, "No line end found :(");
             return new VarDeclaration() { identifier = identifier};
         }
         return ParseExpr();

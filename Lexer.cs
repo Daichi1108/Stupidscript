@@ -8,7 +8,6 @@ enum TokenType {
     NumLiteral, StringLiteral,
     Dot, Comma,
     Arrow, Colon,
-    LineEnd,
     ConditionalOperator,
     If, While, For,
     EOF
@@ -76,7 +75,6 @@ class Lexer {
             if (FirstIndexed("}", TokenType.CloseCurly)) return;
             if (FirstIndexed("[", TokenType.OpenBracket)) return;
             if (FirstIndexed("]", TokenType.CloseBracket)) return;
-            if (FirstIndexed("e", TokenType.LineEnd)) return;
             if (code[0] == '"') {
                 int i = 1;
                 while (code[i] != '"') i++;
@@ -84,9 +82,9 @@ class Lexer {
                 code = code.Substring(i+1);
                 return;
             }
-            if (IsLetter(code[0])) {
+            if (char.IsLetter(code[0])) {
                 int i = 1;
-                while (IsLetter(code[i]) || char.IsDigit(code[i])) i++;
+                while (char.IsLetter(code[i]) || char.IsDigit(code[i])) i++;
                 tokens.Add(new Token(code.Substring(0, i), TokenType.Identifier));
                 code = code.Substring(i);
                 return;
@@ -99,10 +97,6 @@ class Lexer {
                 return;
             }
             code = code.Substring(1);
-        }
-
-        bool IsLetter(char c) {
-            return char.IsLetter(c) && c != 'e';
         }
 
         bool FirstIndexed(string str, TokenType tokenType) {
