@@ -1,3 +1,5 @@
+using System.Formats.Asn1;
+
 class Parser {
 
     List<Stmt> ast = new();
@@ -262,6 +264,17 @@ class Parser {
                 Expr expr = ParseExpr();
                 Expect(TokenType.CloseParen, "I need some close parenthasese thank you idiot");
                 return expr;
+            case TokenType.OpenBracket:
+                Eat();
+                List<Expr> values = new();
+                while (At().type != TokenType.CloseBracket) {
+                    values.Add(ParseExpr());
+                    if (At().type != TokenType.CloseBracket) {
+                        Expect(TokenType.Comma, "COMMA COMMA COMMA COMMA");
+                    }
+                }
+                Eat();
+                return new ListLiteral() { values=values };
             case TokenType.BinaryOperator:
                 if (At().value == "-") {
                     Eat();

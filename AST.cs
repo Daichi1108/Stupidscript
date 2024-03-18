@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 class Stmt {
     public virtual RuntimeVal Eval(Env env) {
         throw new Exception("tbh this is prolly my fault mb mb");
@@ -241,6 +243,9 @@ class AccessExpr : Expr {
         if (leftVal is StringVal) {
             return new StringVal() { value=((StringVal)leftVal).value.Substring((int)((NumVal)rightVal).value,1) };
         }
+        if (leftVal is ListVal) {
+            return ((ListVal)leftVal).values[(int)((NumVal)rightVal).value];
+        }
         throw new Exception($"{leftVal.GetType()} cant be used for the uhh um whats it called like accessing");
     }
 }
@@ -274,6 +279,19 @@ class ObjectLiteral : Expr {
             obj.properties.Add(key, properties[key].Eval(env));
         }
         return obj;
+    }
+}
+
+class ListLiteral : Expr {
+    public List<Expr> values = new();
+
+    public override RuntimeVal Eval(Env env)
+    {
+        List<RuntimeVal> listVals = new();
+        foreach (Expr expr in values) {
+            listVals.Add(expr.Eval(env));
+        }
+        return new ListVal() { values=listVals };
     }
 }
 

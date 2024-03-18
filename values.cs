@@ -35,6 +35,19 @@ class BoolVal : RuntimeVal {
     }
 }
 
+class ListVal : RuntimeVal {
+    public List<RuntimeVal> values = new();
+
+    public override string ToString()
+    {
+        string str = "[";
+        foreach (RuntimeVal val in values) {
+            str += val + ", ";
+        }
+        return str.Substring(0,str.Length-2) + "]";
+    }
+}
+
 class Object : RuntimeVal {
     public Dictionary<string, RuntimeVal> properties = new();
 
