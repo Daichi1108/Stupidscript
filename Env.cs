@@ -5,8 +5,8 @@ class Env {
     public static Env DeclareGlobalEnv() {
         Env env = new();
 
-        env.DeclareVar("tru", new BoolVal() { value=true });
-        env.DeclareVar("fals", new BoolVal() { value=false });
+        env.DeclareVar("true", new BoolVal() { value=true });
+        env.DeclareVar("false", new BoolVal() { value=false });
         env.DeclareVar("null", new NullVal());
 
         static Object Print(List<RuntimeVal> args) {
