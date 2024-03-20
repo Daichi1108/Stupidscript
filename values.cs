@@ -40,6 +40,11 @@ class StringVal : RuntimeVal {
             return new StringVal(value.Substring((int)((NumVal)args[0]).value, (int)((NumVal)args[1]).value - (int)((NumVal)args[0]).value));
         }
         properties.Add("substring", new NativeFn(Substring));
+
+        RuntimeVal ParseNum(List<RuntimeVal> args) {
+            return new NumVal(int.Parse(value));
+        }
+        properties.Add("parsenum", new NativeFn(ParseNum));
     }
 
     public override string ToString()
@@ -75,6 +80,24 @@ class ListVal : RuntimeVal {
             return new NullVal();
         }
         properties.Add("add", new NativeFn(Add));
+
+        RuntimeVal Pop(List<RuntimeVal> args) {
+            RuntimeVal temp;
+            if (args.Count == 0) {
+                temp = values[values.Count-1];
+                values.RemoveAt(values.Count-1);
+                return temp;
+            }
+            temp = values[(int)((NumVal)args[0]).value];
+            values.RemoveAt((int)((NumVal)args[0]).value);
+            return temp;
+        }
+        properties.Add("pop", new NativeFn(Pop));
+
+        RuntimeVal Len(List<RuntimeVal> args) {
+            return new NumVal(values.Count);
+        }
+        properties.Add("len", new NativeFn(Len));
     }
 
     public override string ToString()
@@ -108,11 +131,13 @@ class Function : RuntimeVal {
     public List<string> parameters;
     public List<string> returns;
     public List<Stmt> body;
+    public Env env;
 
-    public Function(List<string> parameters, List<string> returns, List<Stmt> body) {
+    public Function(List<string> parameters, List<string> returns, List<Stmt> body, Env env) {
         this.parameters = parameters;
         this.returns = returns;
         this.body = body;
+        this.env = env;
     }
 
     public override string ToString()
@@ -135,5 +160,10 @@ class NativeFn : RuntimeVal {
 
     public NativeFn(Func func) {
         this.func = func;
+    }
+
+    public override string ToString()
+    {
+        return "Fuck you";
     }
 }

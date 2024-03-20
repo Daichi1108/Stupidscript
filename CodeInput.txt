@@ -1,5 +1,0 @@
-//Lexer
-
-stinkapotamus tokenize = pterodactyl code -> tokens {
-    
-}

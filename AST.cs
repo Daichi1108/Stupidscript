@@ -248,7 +248,7 @@ class CallExpr : Expr {
         RuntimeVal fn = func.Eval(env);
         if (fn is Function) {
             Function function = (Function)fn;
-            Env fenv = new() { parent=env };
+            Env fenv = new Env() { parent=function.env };
             for (int i = 0; i < function.parameters.Count; i++) {
                 fenv.DeclareVar(function.parameters[i], args[i].Eval(fenv));
             }
@@ -396,7 +396,7 @@ class FunctionDeclaration : Expr {
 
     public override RuntimeVal Eval(Env env)
     {
-        return new Function(parameters, returns, body);
+        return new Function(parameters, returns, body, env);
     }
 }
 
