@@ -41,7 +41,7 @@ class Lexer {
         return tokens;
 
         void LexToken() {
-            if (FirstIndexed("hippopotamus", TokenType.Var)) return;
+            if (FirstIndexed("stinkapotamus", TokenType.Var)) return;
             if (FirstIndexed("pterodactyl", TokenType.FuncDeclaration)) return;
             if (FirstIndexed("while", TokenType.While)) return;
             if (FirstIndexed("for", TokenType.For)) return;

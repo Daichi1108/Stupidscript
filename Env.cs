@@ -5,25 +5,25 @@ class Env {
     public static Env DeclareGlobalEnv() {
         Env env = new();
 
-        env.DeclareVar("true", new BoolVal() { value=true });
-        env.DeclareVar("false", new BoolVal() { value=false });
+        env.DeclareVar("true", new BoolVal(true));
+        env.DeclareVar("false", new BoolVal(false));
         env.DeclareVar("null", new NullVal());
 
-        static Object Print(List<RuntimeVal> args) {
+        static RuntimeVal Print(List<RuntimeVal> args) {
             foreach (RuntimeVal val in args) {
                 Console.Write(val);
             }
-            return new Object();
+            return new NullVal();
         }
-        env.DeclareVar("print", new NativeFn() { func=Print });
+        env.DeclareVar("print", new NativeFn(Print));
 
-        static Object PrintLn(List<RuntimeVal> args) {
+        static RuntimeVal PrintLn(List<RuntimeVal> args) {
             foreach (RuntimeVal val in args) {
                 Console.WriteLine(val);
             }
-            return new Object();
+            return new NullVal();
         }
-        env.DeclareVar("println", new NativeFn() { func=PrintLn });
+        env.DeclareVar("println", new NativeFn(PrintLn));
 
         return env;
     }

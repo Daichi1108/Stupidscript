@@ -52,7 +52,7 @@ class Parser {
                 forAst.Add(ParseStmt());
             }
             Eat();
-            return new ForStmt() { loopStmt=loopStmt, ast=forAst };
+            return new ForStmt(loopStmt, forAst);
         }
         return ParseWhileStmt();
     }
@@ -67,7 +67,7 @@ class Parser {
                 whileAst.Add(ParseStmt());
             }
             Eat();
-            return new WhileStmt() { boolean=booleanVal, ast=whileAst };
+            return new WhileStmt(booleanVal, whileAst);
         }
         return ParseIfStmt();
     }
@@ -82,7 +82,7 @@ class Parser {
                 ifAst.Add(ParseStmt());
             }
             Eat();
-            return new IfStmt() { boolean=booleanVal, ast=ifAst };
+            return new IfStmt(booleanVal, ifAst);
         }
         return ParseVarDeclaration();
     }
@@ -94,9 +94,9 @@ class Parser {
             if (At().type == TokenType.Equals) {
                 Eat();
                 Expr value = ParseExpr();
-                return new VarDeclaration() { identifier = identifier, value = value};
+                return new VarDeclaration(identifier, value);
             }
-            return new VarDeclaration() { identifier = identifier};
+            return new VarDeclaration(identifier);
         }
         return ParseExpr();
     }
@@ -111,22 +111,16 @@ class Parser {
             if (At().type == TokenType.Equals) {
                 Eat();
                 Expr value = ParseExpr();
-                return new VarAssignment() { identifier=((Identifier)left).symbol, value=value };
+                return new VarAssignment(left, value);
             }
             if (At().type == TokenType.OperatorEquals) {
                 string operation = Eat().value.Substring(0, 1);
                 Expr value = ParseExpr();
-                return new VarAssignment() { 
-                    identifier=((Identifier)left).symbol, 
-                    value=new BinaryExpr() { left=left, operation=operation, right=value } 
-                };
+                return new VarAssignment(left, new BinaryExpr(left, operation, value));
             }
             if (At().type == TokenType.IncrementOperation) {
                 string operation = Eat().value.Substring(0, 1);
-                return new VarAssignment() {
-                    identifier=((Identifier)left).symbol,
-                    value=new BinaryExpr() { left=left, operation=operation, right=new NumLiteral() { value=1 }}
-                };
+                return new VarAssignment(left, new BinaryExpr(left, operation, new NumLiteral(1)));
             }
         }
         return left;
@@ -137,7 +131,7 @@ class Parser {
         while (At().value == "==" || At().value == "!=")  {
             string operation = Eat().value;
             Expr right = ParseRelationalExpr();
-            left = new ConditionalExpr() {left = left, right = right, operation = operation};
+            left = new ConditionalExpr(left, operation, right);
         }
         return left;
     }
@@ -147,7 +141,7 @@ class Parser {
         while (At().value == ">" || At().value == "<" || At().value == ">=" || At().value == "<=")  {
             string operation = Eat().value;
             Expr right = ParseAdditiveExpr();
-            left = new ConditionalExpr() {left = left, right = right, operation = operation};
+            left = new ConditionalExpr(left, operation, right);
         }
         return left;
     }
@@ -157,7 +151,7 @@ class Parser {
         while (At().value == "+" || At().value == "-")  {
             string operation = Eat().value;
             Expr right = ParseMultiplicitiveExpr();
-            left = new BinaryExpr() {left = left, right = right, operation = operation};
+            left = new BinaryExpr(left, operation, right);
         }
         return left;
     }
@@ -167,7 +161,7 @@ class Parser {
         while (At().value == "/" || At().value == "*" || At().value == "%")  {
             string operation = Eat().value;
             Expr right = ParseObjectExpr();
-            left = new BinaryExpr() {left = left, right = right, operation = operation};
+            left = new BinaryExpr(left, operation, right);
         }
         return left;
     }
@@ -175,18 +169,18 @@ class Parser {
     Expr ParseObjectExpr() {
         if (At().type == TokenType.OpenCurly) {
             Eat();
-            ObjectLiteral obj = new();
+            Dictionary<string, Expr> properties = new();
             while (At().type != TokenType.CloseCurly) {
                 string identifier = Expect(TokenType.Identifier, "I need an identifier dipshit").value;
                 Expect(TokenType.Colon, "Colon required in object creation, why? idk");
                 Expr value = ParseExpr();
-                obj.properties.Add(identifier, value);
+                properties.Add(identifier, value);
                 if (At().type != TokenType.CloseCurly) {
                     Expect(TokenType.Comma, "comma wheresa???");
                 }
             }
             Eat();
-            return obj;
+            return new ObjectLiteral(properties);
         }
         return ParseFuncDeclaration();
     }
@@ -215,7 +209,7 @@ class Parser {
                 body.Add(ParseStmt());
             }
             Eat();
-            return new FunctionDeclaration() { parameters=parameters, returns=returns, body=body };
+            return new FunctionDeclaration(parameters, returns, body);
         }
         return ParseMemberCallExpr();
     }
@@ -226,7 +220,7 @@ class Parser {
             if (At().type == TokenType.Dot) {
                 Eat();
                 string right = Expect(TokenType.Identifier, "right hand of member thingy needs an identifier").value;
-                left = new MemberExpr() { left=left, right=right };
+                left = new MemberExpr(left, right);
             }
             if (At().type == TokenType.OpenParen) {
                 Eat();
@@ -238,13 +232,13 @@ class Parser {
                     }
                 }
                 Eat();
-                left = new CallExpr() { func=left, args=args };
+                left = new CallExpr(left, args);
             }
             if (At().type == TokenType.OpenBracket) {
                 Eat();
                 Expr right = ParseExpr();
                 Expect(TokenType.CloseBracket, "wtf where is my closing bracket");
-                left = new AccessExpr() { left=left, right=right };
+                left = new AccessExpr(left, right);
             }
         }
         return left;
@@ -252,9 +246,9 @@ class Parser {
 
     Expr ParsePrimaryExpr() {
         switch (At().type) {
-            case TokenType.Identifier: return new Identifier() { symbol = Eat().value};
-            case TokenType.NumLiteral: return new NumLiteral() { value = double.Parse(Eat().value) };
-            case TokenType.StringLiteral: return new StringLiteral() { value = Eat().value };
+            case TokenType.Identifier: return new Identifier(Eat().value);
+            case TokenType.NumLiteral: return new NumLiteral(double.Parse(Eat().value));
+            case TokenType.StringLiteral: return new StringLiteral(Eat().value);
             case TokenType.OpenParen:
                 Eat();
                 Expr expr = ParseExpr();
@@ -270,15 +264,11 @@ class Parser {
                     }
                 }
                 Eat();
-                return new ListLiteral() { values=values };
+                return new ListLiteral(values);
             case TokenType.BinaryOperator:
                 if (At().value == "-") {
                     Eat();
-                    return new BinaryExpr() {
-                        left=new NumLiteral() { value=-1 },
-                        operation="*",
-                        right=ParsePrimaryExpr()
-                    };
+                    return new BinaryExpr(new NumLiteral(-1), "*", ParsePrimaryExpr());
                 }
                 throw new Exception(At().value + " ya what is this doing here");
             default:
