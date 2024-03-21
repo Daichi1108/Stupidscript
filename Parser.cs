@@ -33,6 +33,14 @@ class Parser {
 
 
     Stmt ParseStmt() {
+        return ParseReturn();
+    }
+
+    Stmt ParseReturn() {
+        if (At().type == TokenType.Return) {
+            Eat();
+            return new Return();
+        }
         return ParseForStmt();
     }
 

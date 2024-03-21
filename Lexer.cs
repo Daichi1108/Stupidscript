@@ -10,7 +10,7 @@ enum TokenType {
     Arrow, Colon,
     ConditionalOperator,
     If, While, For,
-    EOF
+    EOF, Return
 }
 struct Token {
     public string value {get;}
@@ -41,6 +41,7 @@ class Lexer {
         return tokens;
 
         void LexToken() {
+            if (FirstIndexed("return", TokenType.Return)) return;
             if (FirstIndexed("while", TokenType.While)) return;
             if (FirstIndexed("for", TokenType.For)) return;
             if (FirstIndexed("var", TokenType.Var)) return;

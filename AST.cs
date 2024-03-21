@@ -8,6 +8,14 @@ class Stmt {
 class Expr : Stmt {}
 
 //STMT
+class Return : Stmt {
+
+    public override RuntimeVal Eval(Env env)
+    {
+        return new ReturnVal();
+    }
+}
+
 class ForStmt : Stmt {
     public List<Stmt> loopStmt;
     public List<Stmt> ast;
@@ -25,7 +33,7 @@ class ForStmt : Stmt {
         while (((BoolVal)loopStmt[1].Eval(forEnv)).value) {
             Env newEnv = new() { parent=forEnv };
             foreach (Stmt stmt in ast) {
-                stmt.Eval(newEnv);
+                if (stmt.Eval(newEnv) is ReturnVal) return new ReturnVal();
             }
             loopStmt[2].Eval(forEnv);
         }
@@ -47,7 +55,7 @@ class WhileStmt : Stmt {
         while (((BoolVal)boolean.Eval(env)).value) {
             Env newEnv = new() { parent=env };
             foreach (Stmt stmt in ast) {
-                stmt.Eval(newEnv);
+                if (stmt.Eval(newEnv) is ReturnVal) return new ReturnVal();
             }
         }
         return new NullVal();
@@ -68,7 +76,7 @@ class IfStmt : Stmt {
         if (((BoolVal)boolean.Eval(env)).value) {
             Env newEnv = new() { parent=env };
             foreach (Stmt stmt in ast) {
-                stmt.Eval(newEnv);
+                if (stmt.Eval(newEnv) is ReturnVal) return new ReturnVal();
             }
         }
         return new NullVal();
@@ -255,9 +263,12 @@ class CallExpr : Expr {
             foreach (string r in function.returns) {
                 fenv.DeclareVar(r, new NullVal());
             }
+
             foreach (Stmt stmt in function.body) {
-                stmt.Eval(fenv);
+                if (stmt.Eval(fenv) is ReturnVal) break;
             }
+
+
             Dictionary<string, RuntimeVal> returns = new();
             foreach (string r in function.returns) {
                 returns.Add(r, fenv.GetVal(r));

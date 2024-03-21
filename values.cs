@@ -5,6 +5,8 @@ class RuntimeVal {
     public Dictionary<string, RuntimeVal> properties = new();
 }
 
+class ReturnVal : RuntimeVal {}
+
 class NullVal : RuntimeVal {
     public override string ToString()
     {
