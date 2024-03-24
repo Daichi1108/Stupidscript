@@ -11,7 +11,7 @@ class Env {
 
         static RuntimeVal Print(List<RuntimeVal> args) {
             foreach (RuntimeVal val in args) {
-                Console.Write(val);
+                Console.Write(val + " ");
             }
             return new NullVal();
         }
@@ -19,8 +19,9 @@ class Env {
 
         static RuntimeVal PrintLn(List<RuntimeVal> args) {
             foreach (RuntimeVal val in args) {
-                Console.WriteLine(val);
+                Console.Write(val + " ");
             }
+            Console.WriteLine();
             return new NullVal();
         }
         env.DeclareVar("println", new NativeFn(PrintLn));

@@ -160,8 +160,8 @@ class ConditionalExpr : Expr {
                 case "<": return new BoolVal(((StringVal)leftVal).value.Length < ((StringVal)rightVal).value.Length);
                 case ">=": return new BoolVal(((StringVal)leftVal).value.Length >= ((StringVal)rightVal).value.Length);
                 case "<=": return new BoolVal(((StringVal)leftVal).value.Length <= ((StringVal)rightVal).value.Length);
-                case "==": return new BoolVal(((StringVal)leftVal).value.Length == ((StringVal)rightVal).value.Length);
-                case "!=": return new BoolVal(((StringVal)leftVal).value.Length != ((StringVal)rightVal).value.Length);
+                case "==": return new BoolVal(((StringVal)leftVal).value == ((StringVal)rightVal).value);
+                case "!=": return new BoolVal(((StringVal)leftVal).value != ((StringVal)rightVal).value);
             }
         }
         if (leftVal is BoolVal) {
@@ -258,7 +258,7 @@ class CallExpr : Expr {
             Function function = (Function)fn;
             Env fenv = new Env() { parent=function.env };
             for (int i = 0; i < function.parameters.Count; i++) {
-                fenv.DeclareVar(function.parameters[i], args[i].Eval(fenv));
+                fenv.DeclareVar(function.parameters[i], args[i].Eval(env));
             }
             foreach (string r in function.returns) {
                 fenv.DeclareVar(r, new NullVal());

@@ -47,6 +47,12 @@ class StringVal : RuntimeVal {
             return new NumVal(int.Parse(value));
         }
         properties.Add("parsenum", new NativeFn(ParseNum));
+
+        RuntimeVal IsNum(List<RuntimeVal> args) {
+            int num;
+            return new BoolVal(int.TryParse(value, out num));
+        }
+        properties.Add("isnum", new NativeFn(IsNum));
     }
 
     public override string ToString()
@@ -104,6 +110,7 @@ class ListVal : RuntimeVal {
 
     public override string ToString()
     {
+        if (values.Count == 0) return "[]";
         string str = "[";
         foreach (RuntimeVal val in values) {
             str += val + ", ";
