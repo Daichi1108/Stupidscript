@@ -166,7 +166,7 @@ class Parser {
 
     Expr ParseMultiplicitiveExpr() {
         Expr left = ParseObjectExpr();
-        while (At().value == "/" || At().value == "*" || At().value == "%")  {
+        while (At().value == "/" || At().value == "*" || At().value == "%" || At().value == "//")  {
             string operation = Eat().value;
             Expr right = ParseObjectExpr();
             left = new BinaryExpr(left, operation, right);

@@ -58,6 +58,7 @@ class Lexer {
             if (FirstIndexed("%=", TokenType.OperatorEquals)) return;
             if (FirstIndexed("++", TokenType.IncrementOperation)) return;
             if (FirstIndexed("--", TokenType.IncrementOperation)) return;
+            if (FirstIndexed("//", TokenType.BinaryOperator)) return;
             if (FirstIndexed("->", TokenType.Arrow)) return;
             if (FirstIndexed(">", TokenType.ConditionalOperator)) return;
             if (FirstIndexed("<", TokenType.ConditionalOperator)) return;
@@ -123,8 +124,8 @@ class Lexer {
 
         string RemoveComments(string str) {
             string o = "";
-            while (str.Contains("//")) {
-                o += str.Substring(0, str.IndexOf("//"));
+            while (str.Contains("///")) {
+                o += str.Substring(0, str.IndexOf("///"));
                 str = str.Substring(str.IndexOf("\n"));
             }
             return o + str;

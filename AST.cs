@@ -236,6 +236,7 @@ class BinaryExpr : Expr {
                 case "%": return new NumVal(((NumVal)leftVal).value % ((NumVal)rightVal).value);
                 case "+": return new NumVal(((NumVal)leftVal).value + ((NumVal)rightVal).value);
                 case "-": return new NumVal(((NumVal)leftVal).value - ((NumVal)rightVal).value);
+                case "//": return new NumVal((int)(((NumVal)leftVal).value / ((NumVal)rightVal).value));
             }
         }
         throw new Exception($"{leftVal.GetType()} {operation} {rightVal.GetType()} doesnt work at all stupid");
