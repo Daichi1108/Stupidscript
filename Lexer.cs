@@ -15,14 +15,16 @@ enum TokenType {
 struct Token {
     public string value {get;}
     public TokenType type {get;}
+    public int line {get;}
 
-    public Token(string value, TokenType type) {
+    public Token(string value, TokenType type, int line) {
         this.value = value;
         this.type = type;
+        this.line = line;
     }
 
     public override string ToString() {
-        return $"|{value} : {type}|";
+        return $"|{value} : {type} : Line: {line}|";
     }
 }
 
@@ -33,10 +35,12 @@ class Lexer {
         code = RemoveComments(code);
         List<Token> tokens = new List<Token>();
 
+        int line = 1;
+
         while (code.Length > 0) {
             LexToken();
         }
-        tokens.Add(new Token("EOF", TokenType.EOF));
+        tokens.Add(new Token("EOF", TokenType.EOF, line));
 
         return tokens;
 
@@ -79,31 +83,35 @@ class Lexer {
             if (FirstIndexed("]", TokenType.CloseBracket)) return;
             if (code[0] == '"') {
                 int i = 1;
-                while (code[i] != '"') i++;
-                tokens.Add(new Token(code.Substring(1, i-1), TokenType.StringLiteral));
+                while (code[i] != '"') {
+                    if (code[i] == '\n') line++;
+                    i++;
+                }
+                tokens.Add(new Token(code.Substring(1, i-1), TokenType.StringLiteral, line));
                 code = code.Substring(i+1);
                 return;
             }
             if (char.IsLetter(code[0])) {
                 int i = 1;
                 while (char.IsLetter(code[i]) || char.IsDigit(code[i])) i++;
-                tokens.Add(new Token(code.Substring(0, i), TokenType.Identifier));
+                tokens.Add(new Token(code.Substring(0, i), TokenType.Identifier, line));
                 code = code.Substring(i);
                 return;
             }
-            if (char.IsDigit(code[0]) || code[0] == '-') {
+            if (char.IsDigit(code[0])) {
                 int i = 1;
                 while (char.IsDigit(code[i]) || code[i] == '.' && char.IsDigit(code[i+1]) && !code.Substring(i).Contains(".")) i++;
-                tokens.Add(new Token(code.Substring(0, i), TokenType.NumLiteral));
+                tokens.Add(new Token(code.Substring(0, i), TokenType.NumLiteral, line));
                 code = code.Substring(i);
                 return;
             }
+            if (code[0] == '\n') line++;
             code = code.Substring(1);
         }
 
         bool FirstIndexed(string str, TokenType tokenType) {
             if (code.IndexOf(str) == 0) {
-                tokens.Add(new Token(str, tokenType));
+                tokens.Add(new Token(str, tokenType, line));
                 code = code.Substring(str.Length);
                 return true;
             }

@@ -26,7 +26,7 @@ class Parser {
         Token temp = tokens[0];
         tokens.RemoveAt(0);
         if (temp.type != tokenType) {
-            throw new Exception(err);
+            Error.ParsingError(err, temp);
         }
         return temp;
     }
@@ -268,7 +268,7 @@ class Parser {
                 while (At().type != TokenType.CloseBracket) {
                     values.Add(ParseExpr());
                     if (At().type != TokenType.CloseBracket) {
-                        Expect(TokenType.Comma, "COMMA COMMA COMMA COMMA");
+                        Expect(TokenType.Comma, "Comma expected");
                     }
                 }
                 Eat();
@@ -278,9 +278,12 @@ class Parser {
                     Eat();
                     return new BinaryExpr(new NumLiteral(-1), "*", ParsePrimaryExpr());
                 }
-                throw new Exception(At().value + " ya what is this doing here");
+                Error.ParsingError($"{At().value} Invalid binary operator at this position", At());
+                break;
             default:
-                throw new Exception($"wtf is that: {At().value}");
+                Error.ParsingError($"{At().value} Token not recognized", At());
+                break;
         }
+        throw new Exception("Parser Broken");
     }
 }

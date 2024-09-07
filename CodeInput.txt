@@ -1,1 +1,2 @@
-println(7 // 2)
+var happy = +123
+println(happy)
