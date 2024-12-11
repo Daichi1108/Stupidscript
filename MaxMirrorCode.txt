@@ -1,4 +1,4 @@
-//MAX MIRROR CODING BAT
+///MAX MIRROR CODING BAT
 
 var maxmirror = fn nums -> max {
 

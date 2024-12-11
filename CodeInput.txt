@@ -1,2 +1,6 @@
-var happy = +123
-println(happy)
+var func = fn var1, var2 -> return1 {
+    return1 = "yippee"
+}
+
+var yay = func(2, 3)
+print(yay)

@@ -26,7 +26,7 @@ class Parser {
         Token temp = tokens[0];
         tokens.RemoveAt(0);
         if (temp.type != tokenType) {
-            Error.ParsingError(err, temp);
+            Error.ParsingError($"{err} -> {temp.type} found", temp);
         }
         return temp;
     }
@@ -200,16 +200,16 @@ class Parser {
             List<string> returns = new();
             List<Stmt> body = new();
             while (At().type != TokenType.OpenCurly && At().type != TokenType.Arrow) {
-                parameters.Add(Expect(TokenType.Identifier, "i need identifiers for return thingies").value);
+                parameters.Add(Expect(TokenType.Identifier, "Identifers expected for parameters").value);
                 if (At().type != TokenType.OpenCurly && At().type != TokenType.Arrow) {
-                    Expect(TokenType.Comma, "commmmmmaaaaaa");
+                    Expect(TokenType.Comma, "Comma expected between parameters");
                 }
             }
             if (At().type == TokenType.Arrow) Eat();
             while (At().type != TokenType.OpenCurly) {
-                returns.Add(Expect(TokenType.Identifier, "Expects identifiers for args").value);
+                returns.Add(Expect(TokenType.Identifier, "Identifier expected for return variables").value);
                 if (At().type != TokenType.OpenCurly) {
-                    Expect(TokenType.Comma, "comma where????");
+                    Expect(TokenType.Comma, "Comma expected between return variables");
                 }
             }
             Eat();
@@ -227,7 +227,7 @@ class Parser {
         while (At().type == TokenType.Dot || At().type == TokenType.OpenParen || At().type == TokenType.OpenBracket) {
             if (At().type == TokenType.Dot) {
                 Eat();
-                string right = Expect(TokenType.Identifier, "right hand of member thingy needs an identifier").value;
+                string right = Expect(TokenType.Identifier, "Identifier expected following dot").value;
                 left = new MemberExpr(left, right);
             }
             if (At().type == TokenType.OpenParen) {
@@ -236,7 +236,7 @@ class Parser {
                 while (At().type != TokenType.CloseParen) {
                     args.Add(ParseExpr());
                     if (At().type != TokenType.CloseParen) {
-                        Expect(TokenType.Comma, "need a commaaaaaaaa");
+                        Expect(TokenType.Comma, "Comma expected");
                     }
                 }
                 Eat();
@@ -245,7 +245,7 @@ class Parser {
             if (At().type == TokenType.OpenBracket) {
                 Eat();
                 Expr right = ParseExpr();
-                Expect(TokenType.CloseBracket, "wtf where is my closing bracket");
+                Expect(TokenType.CloseBracket, "Closing Bracket expected");
                 left = new AccessExpr(left, right);
             }
         }
@@ -260,7 +260,7 @@ class Parser {
             case TokenType.OpenParen:
                 Eat();
                 Expr expr = ParseExpr();
-                Expect(TokenType.CloseParen, "I need some close parenthasese thank you idiot");
+                Expect(TokenType.CloseParen, "Closing Parentheses expected");
                 return expr;
             case TokenType.OpenBracket:
                 Eat();
@@ -284,6 +284,7 @@ class Parser {
                 Error.ParsingError($"{At().value} Token not recognized", At());
                 break;
         }
-        throw new Exception("Parser Broken");
+        Error.ParsingError("The Parser is broken somehow", At());
+        throw new Exception("Uh Oh");
     }
 }

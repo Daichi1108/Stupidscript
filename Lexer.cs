@@ -94,7 +94,9 @@ class Lexer {
             if (char.IsLetter(code[0])) {
                 int i = 1;
                 while (char.IsLetter(code[i]) || char.IsDigit(code[i])) i++;
-                tokens.Add(new Token(code.Substring(0, i), TokenType.Identifier, line));
+                string tokenString = code.Substring(0, i)
+                if (tokenString == "return") tokens.Add(new Token(tokenString, TokenType.Return, line));
+                else tokens.Add(new Token(tokenString, TokenType.Identifier, line));
                 code = code.Substring(i);
                 return;
             }
