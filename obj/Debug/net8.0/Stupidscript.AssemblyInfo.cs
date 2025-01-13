@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Stupidscript")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b26565aae036fe7f1eebe4d778bab9fbb4661cf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa21f745943ffbc91e5aff845c347bfc5b6178d1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Stupidscript")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Stupidscript")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

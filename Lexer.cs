@@ -45,12 +45,6 @@ class Lexer {
         return tokens;
 
         void LexToken() {
-            if (FirstIndexed("return", TokenType.Return)) return;
-            if (FirstIndexed("while", TokenType.While)) return;
-            if (FirstIndexed("for", TokenType.For)) return;
-            if (FirstIndexed("var", TokenType.Var)) return;
-            if (FirstIndexed("fn", TokenType.FuncDeclaration)) return;
-            if (FirstIndexed("if", TokenType.If)) return;
             if (FirstIndexed("==", TokenType.ConditionalOperator)) return;
             if (FirstIndexed(">=", TokenType.ConditionalOperator)) return;
             if (FirstIndexed("<=", TokenType.ConditionalOperator)) return;
@@ -94,8 +88,13 @@ class Lexer {
             if (char.IsLetter(code[0])) {
                 int i = 1;
                 while (char.IsLetter(code[i]) || char.IsDigit(code[i])) i++;
-                string tokenString = code.Substring(0, i)
+                string tokenString = code.Substring(0, i);
                 if (tokenString == "return") tokens.Add(new Token(tokenString, TokenType.Return, line));
+                else if (tokenString == "while") tokens.Add(new Token(tokenString, TokenType.While, line));
+                else if (tokenString == "for") tokens.Add(new Token(tokenString, TokenType.For, line));
+                else if (tokenString == "var") tokens.Add(new Token(tokenString, TokenType.Var, line));
+                else if (tokenString == "fn") tokens.Add(new Token(tokenString, TokenType.FuncDeclaration, line));
+                else if (tokenString == "if") tokens.Add(new Token(tokenString, TokenType.If, line));
                 else tokens.Add(new Token(tokenString, TokenType.Identifier, line));
                 code = code.Substring(i);
                 return;
