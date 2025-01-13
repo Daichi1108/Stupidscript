@@ -4,5 +4,5 @@ Very bad programming language. Super hard to use but it kinda works sometimes. L
 
 It is fully functional with functions, objects, variables, control statements, and other simple stuff. it lacks alot of features tho and its super hard to use.
 
-#Syntax
-#Variables
+# Syntax
+# Variables
